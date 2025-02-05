@@ -6,7 +6,7 @@
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:34:27 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/03 15:52:12 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/05 23:36:02 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ typedef struct s_philo
 }						t_philo;
 
 void					print_usage(void);
+
 long					gettimeofday_ms(void);
+int						ft_atoi(const char *nptr);
+
+int						check_args(int argc, char **argv);
+void					free_philosophers(t_philo **philosophers);
+t_philo					**create_philosophers(t_table *table, size_t size);
 
 #endif
