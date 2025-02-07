@@ -6,7 +6,7 @@
 #    By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/03 11:44:58 by jyriarte          #+#    #+#              #
-#    Updated: 2025/02/03 15:52:10 by jyriarte         ###   ########.fr        #
+#    Updated: 2025/02/07 14:16:03 by jyriarte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = cc
 RM = rm -f
 CFLAGS = -Wall -Werror -Wextra
 
-SOURCES = philo.c print_usage.c philo_utils.c
+SOURCES = main.c philosophers.c check_args.c print_usage.c utils.c table.c mutex.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
