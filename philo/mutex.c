@@ -6,7 +6,7 @@
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 14:06:32 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/07 15:13:43 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/09 10:46:31 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ int	create_mutexes(t_table *table, int size)
 			return (1);
 		i++;
 	}
+	table->mutex = create_mutex();
+	if (table->mutex == NULL)
+		return (1);
 	return (0);
 }
 
@@ -49,6 +52,11 @@ int	init_mutexes(t_table *table, int size)
 		}
 		i++;
 	}
+	if (pthread_mutex_init(table->mutex, NULL))
+	{
+		destroy_mutexes(table, size);
+		return (1);
+	}
 	return (0);
 }
 
@@ -63,6 +71,8 @@ void	destroy_mutexes(t_table *table, int size)
 			return ;
 		i++;
 	}
+	if (pthread_mutex_destroy(table->mutex))
+		return ;
 }
 
 static pthread_mutex_t	*create_mutex(void)

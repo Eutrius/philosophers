@@ -48,6 +48,7 @@ void	clean_table(t_table *table)
 			free(table->mutexes[i]);
 			i++;
 		}
+		free(table->mutex);
 		free(table->mutexes);
 	}
 }

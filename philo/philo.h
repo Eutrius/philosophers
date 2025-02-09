@@ -6,7 +6,7 @@
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:34:27 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/07 17:39:35 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:31:30 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,16 @@
 
 # include <pthread.h>
 
+# define LEFT 0
+# define RIGHT 1
+
 typedef struct s_philo	t_philo;
 typedef struct s_table	t_table;
 
 typedef struct s_table
 {
 	pthread_mutex_t		**mutexes;
+	pthread_mutex_t		*mutex;
 	int					*forks;
 	int					someone_died;
 	int					n_of_philos;
@@ -52,6 +56,13 @@ int						ft_atoi(const char *nptr);
 int						check_args(int argc, char **argv);
 void					free_philosophers(t_philo **philosophers);
 t_philo					**create_philosophers(t_table *table, size_t size);
+void					simulate(t_table *table, t_philo **philosophers);
+
+void					ph_sleep(t_table *table, t_philo *philo);
+void					ph_think(t_table *table, t_philo *philo);
+void					ph_die(t_philo *philo);
+void					ph_take_fork(t_table *table, t_philo *philo, int right);
+void					ph_eat(t_table *table, t_philo *philo);
 
 int						prepare_table(t_table *table, int argc, char **argv);
 void					clean_table(t_table *table);

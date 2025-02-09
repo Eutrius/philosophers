@@ -6,7 +6,7 @@
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 22:06:52 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/07 13:18:15 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:37:32 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	validate_arg(char *arg, int index)
 	}
 	while (arg[i] != '\0')
 	{
-		if (arg[i] < '0' && arg[i] > '9')
+		if (arg[i] < '0' || arg[i] > '9')
 			return (1);
 		num = (num * 10) + (arg[i] - '0');
 		if (num > INT_MAX)
