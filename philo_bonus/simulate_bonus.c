@@ -59,7 +59,7 @@ static void	*routine(void *data)
 			if (philo->forks == 2)
 				ph_eat(table, philo);
 			if (philo->n_eaten == table->n_to_eat)
-				philo->state = FULL;
+				break ;
 		}
 		else if (philo->state == SLEEPING)
 			ph_sleep(table, philo);

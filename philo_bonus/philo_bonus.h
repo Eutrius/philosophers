@@ -55,7 +55,6 @@ typedef enum e_state
 	IDLE,
 	THINKING,
 	SLEEPING,
-	FULL
 }						t_state;
 
 void					print_usage(void);
