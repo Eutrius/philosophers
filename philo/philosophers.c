@@ -50,10 +50,19 @@ static t_philo	*create_philosopher(t_table *table, int id)
 	philo->table = table;
 	philo->n_eaten = 0;
 	philo->id = id;
-	philo->left = id - 1;
-	philo->right = id % table->n_of_philos;
-	philo->is_thinking = 0;
+	if (id % 2 == 0)
+	{
+		philo->left = id - 1;
+		philo->right = id % table->n_of_philos;
+	}
+	else
+	{
+		philo->right = id - 1;
+		philo->left = id % table->n_of_philos;
+	}
+	philo->state = IDLE;
 	philo->forks = 0;
+	philo->sleep = 0;
 	return (philo);
 }
 

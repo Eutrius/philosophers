@@ -23,12 +23,12 @@ void	simulate(t_table *table, t_philo **philosophers)
 
 	i = 0;
 	j = 0;
+	gettimeofday_ms();
 	while (i < table->n_of_philos)
 	{
 		if (pthread_create(&philosophers[i]->thread, NULL, routine,
 				philosophers[i]))
 			break ;
-		usleep(1000);
 		i++;
 	}
 	while (j < i)
@@ -50,15 +50,20 @@ static void	*routine(void *data)
 	{
 		if (check_death(table, philo))
 			break ;
-		ph_take_fork(table, philo, LEFT);
-		if (philo->forks == 1)
-			ph_take_fork(table, philo, RIGHT);
-		if (philo->forks == 2)
-			ph_eat(table, philo);
-		if (philo->n_eaten == table->n_to_eat)
-			break ;
-		if (!philo->is_thinking && philo->forks == 0)
+		if (philo->state == IDLE)
 			ph_think(table, philo);
+		else if (philo->state == THINKING)
+		{
+			ph_take_fork(table, philo, LEFT);
+			if (philo->forks == 1)
+				ph_take_fork(table, philo, RIGHT);
+			if (philo->forks == 2)
+				ph_eat(table, philo);
+			if (philo->n_eaten == table->n_to_eat)
+				break ;
+		}
+		else if (philo->state == SLEEPING)
+			ph_sleep(table, philo);
 	}
 	return (NULL);
 }

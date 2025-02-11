@@ -16,7 +16,6 @@
 
 void	ph_eat(t_table *table, t_philo *philo)
 {
-	philo->is_thinking = 0;
 	pthread_mutex_lock(table->mutex);
 	if (!table->someone_died)
 		printf("%li %i is eating\n", gettimeofday_ms(), philo->id);
@@ -36,16 +35,27 @@ void	ph_eat(t_table *table, t_philo *philo)
 
 void	ph_sleep(t_table *table, t_philo *philo)
 {
-	pthread_mutex_lock(table->mutex);
-	if (!table->someone_died)
-		printf("%li %i is sleeping\n", gettimeofday_ms(), philo->id);
-	pthread_mutex_unlock(table->mutex);
-	usleep(table->time_to_sleep * 1000);
+	static long	start;
+
+	if (start == 0 && philo->state != SLEEPING)
+	{
+		philo->state = SLEEPING;
+		philo->sleep = gettimeofday_ms();
+		pthread_mutex_lock(table->mutex);
+		if (!table->someone_died)
+			printf("%li %i is sleeping\n", gettimeofday_ms(), philo->id);
+		pthread_mutex_unlock(table->mutex);
+	}
+	else if (gettimeofday_ms() - philo->sleep >= table->time_to_sleep)
+	{
+		start = 0;
+		philo->state = IDLE;
+	}
 }
 
 void	ph_think(t_table *table, t_philo *philo)
 {
-	philo->is_thinking = 1;
+	philo->state = THINKING;
 	pthread_mutex_lock(table->mutex);
 	if (!table->someone_died)
 		printf("%li %i is thinking\n", gettimeofday_ms(), philo->id);

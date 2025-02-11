@@ -20,6 +20,7 @@
 
 typedef struct s_philo	t_philo;
 typedef struct s_table	t_table;
+typedef enum e_state	t_state;
 
 typedef struct s_table
 {
@@ -40,13 +41,21 @@ typedef struct s_philo
 	int					id;
 	int					n_eaten;
 	long				last_eaten;
+	long				sleep;
 	int					forks;
-	int					is_thinking;
 	int					right;
 	int					left;
 	t_table				*table;
+	int					state;
 
 }						t_philo;
+
+typedef enum e_state
+{
+	IDLE,
+	THINKING,
+	SLEEPING,
+}						t_state;
 
 void					print_usage(void);
 
