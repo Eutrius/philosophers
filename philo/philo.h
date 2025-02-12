@@ -33,6 +33,7 @@ typedef struct s_table
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					n_to_eat;
+	int					n_full;
 }						t_table;
 
 typedef struct s_philo
@@ -55,13 +56,13 @@ typedef enum e_state
 	IDLE,
 	THINKING,
 	SLEEPING,
-	FULL
 }						t_state;
 
 void					print_usage(void);
 
 long					gettimeofday_ms(void);
 int						ft_atoi(const char *nptr);
+void					custom_sleep(int start, int delay);
 
 int						check_args(int argc, char **argv);
 void					free_philosophers(t_philo **philosophers);

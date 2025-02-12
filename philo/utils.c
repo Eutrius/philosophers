@@ -13,6 +13,7 @@
 #include "philo.h"
 #include <stddef.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 long	gettimeofday_ms(void)
 {
@@ -26,6 +27,16 @@ long	gettimeofday_ms(void)
 		return (0);
 	}
 	return ((time.tv_sec * 1000 + time.tv_usec / 1000) - start_time);
+}
+
+void	custom_sleep(int start, int delay)
+{
+	while (1)
+	{
+		if (gettimeofday_ms() - start >= delay)
+			break ;
+		usleep(100);
+	}
 }
 
 int	ft_atoi(const char *nptr)

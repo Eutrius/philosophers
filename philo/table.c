@@ -22,6 +22,7 @@ int	prepare_table(t_table *table, int argc, char **argv)
 	table->time_to_die = ft_atoi(argv[2]);
 	table->time_to_eat = ft_atoi(argv[3]);
 	table->time_to_sleep = ft_atoi(argv[4]);
+	table->n_full = 0;
 	if (argc == 6)
 		table->n_to_eat = ft_atoi(argv[5]);
 	else

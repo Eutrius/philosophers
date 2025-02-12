@@ -13,7 +13,7 @@
 #include "philo.h"
 #include <unistd.h>
 
-static int	check_death(t_table *table, t_philo *philo);
+static int	check_table(t_table *table, t_philo *philo);
 static void	*routine(void *data);
 
 void	simulate(t_table *table, t_philo **philosophers)
@@ -47,7 +47,7 @@ static void	*routine(void *data)
 	table = philo->table;
 	while (1)
 	{
-		if (check_death(table, philo))
+		if (check_table(table, philo))
 			break ;
 		if (philo->state == IDLE)
 			ph_think(table, philo);
@@ -58,8 +58,6 @@ static void	*routine(void *data)
 				ph_take_fork(table, philo, RIGHT);
 			if (philo->forks == 2)
 				ph_eat(table, philo);
-			if (philo->n_eaten == table->n_to_eat)
-				philo->state = FULL;
 		}
 		else if (philo->state == SLEEPING)
 			ph_sleep(table, philo);
@@ -67,7 +65,7 @@ static void	*routine(void *data)
 	return (NULL);
 }
 
-static int	check_death(t_table *table, t_philo *philo)
+static int	check_table(t_table *table, t_philo *philo)
 {
 	if ((int)(gettimeofday_ms() - philo->last_eaten) >= table->time_to_die)
 	{
