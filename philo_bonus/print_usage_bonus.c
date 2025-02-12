@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_usage.c                                      :+:      :+:    :+:   */
+/*   print_usage_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:35:11 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/09 13:45:47 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:06:42 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void	print_usage(void)
 {
@@ -35,4 +36,5 @@ void	print_usage(void)
 	printf(" : Positive Integer (optional)\n\n");
 	printf("               The number of times each philosopher");
 	printf(" must eat. If not provided, there is no limit.\n\n");
+	exit(1);
 }

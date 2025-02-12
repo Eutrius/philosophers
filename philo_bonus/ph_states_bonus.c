@@ -1,36 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ph_states.c                                        :+:      :+:    :+:   */
+/*   ph_states_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 09:30:14 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/09 11:00:55 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:06:23 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 #include <stdio.h>
 #include <unistd.h>
 
 void	ph_eat(t_table *table, t_philo *philo)
 {
-	long	start;
-
 	pthread_mutex_lock(table->mutex);
 	if (!table->someone_died)
 		printf("%li %i is eating\n", gettimeofday_ms(), philo->id);
 	pthread_mutex_unlock(table->mutex);
-	start = gettimeofday_ms();
-	philo->last_eaten = start;
-	while (1)
-	{
-		if (gettimeofday_ms() - start >= table->time_to_eat)
-			break ;
-		usleep(100);
-	}
+	philo->last_eaten = gettimeofday_ms();
+	custom_sleep(philo->last_eaten, table->time_to_eat);
 	philo->n_eaten++;
+	if (philo->n_eaten == table->n_to_eat)
+	{
+		pthread_mutex_lock(table->mutex);
+		table->n_full++;
+		if (table->n_full == table->n_of_philos)
+			table->someone_died = 1;
+		pthread_mutex_unlock(table->mutex);
+	}
 	pthread_mutex_lock(table->mutexes[philo->left]);
 	table->forks[philo->left] = philo->id;
 	pthread_mutex_unlock(table->mutexes[philo->left]);
@@ -38,14 +38,14 @@ void	ph_eat(t_table *table, t_philo *philo)
 	table->forks[philo->right] = philo->id;
 	pthread_mutex_unlock(table->mutexes[philo->right]);
 	philo->forks = 0;
-	ph_sleep(table, philo);
+	philo->sleep = -1;
+	philo->state = SLEEPING;
 }
 
 void	ph_sleep(t_table *table, t_philo *philo)
 {
-	if (philo->state != SLEEPING)
+	if (philo->sleep == -1)
 	{
-		philo->state = SLEEPING;
 		philo->sleep = gettimeofday_ms();
 		pthread_mutex_lock(table->mutex);
 		if (!table->someone_died)

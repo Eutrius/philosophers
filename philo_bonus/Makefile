@@ -10,14 +10,14 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME=philo
+NAME=philo_bonus
 
 CC = cc
 RM = rm -f
 CFLAGS = -Wall -Werror -Wextra
 
-SOURCES = main.c check_args.c philosophers.c print_usage.c utils.c table.c mutex.c \
-		  ph_states.c simulate.c
+SOURCES = main_bonus.c check_args_bonus.c \
+		  print_usage_bonus.c utils_bonus.c 
 
 OBJECTS = $(SOURCES:.c=.o)
 

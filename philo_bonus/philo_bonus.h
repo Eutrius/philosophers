@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/03 14:34:27 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/09 13:31:30 by jyriarte         ###   ########.fr       */
+/*   Created: 2025/02/12 13:05:39 by jyriarte          #+#    #+#             */
+/*   Updated: 2025/02/12 14:30:04 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 # include <pthread.h>
 
-# define LEFT 0
-# define RIGHT 1
+# define TABLE "/table"
 
 typedef struct s_philo	t_philo;
 typedef struct s_table	t_table;
@@ -33,6 +32,7 @@ typedef struct s_table
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					n_to_eat;
+	int					n_full;
 }						t_table;
 
 typedef struct s_philo
@@ -61,10 +61,11 @@ void					print_usage(void);
 
 long					gettimeofday_ms(void);
 int						ft_atoi(const char *nptr);
+void					custom_sleep(int start, int delay);
 
 int						check_args(int argc, char **argv);
 void					free_philosophers(t_philo **philosophers);
-t_philo					**create_philosophers(t_table *table, size_t size);
+pid_t					**create_philosophers(size_t size);
 void					simulate(t_table *table, t_philo **philosophers);
 
 void					ph_sleep(t_table *table, t_philo *philo);
