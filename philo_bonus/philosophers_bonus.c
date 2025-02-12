@@ -17,17 +17,6 @@
 
 /*static t_philo	*create_philosopher(t_table *table, int id);*/
 
-pid_t	**create_philosophers(size_t size)
-{
-	pid_t	**philosophers;
-
-	philosophers = malloc(sizeof(t_philo *) * (size));
-	if (!philosophers)
-		return (NULL);
-	memset(philosophers, 0, sizeof(t_philo *) * (size + 1));
-	return (philosophers);
-}
-
 /*static t_philo	*create_philosopher(t_table *table, int id)*/
 /*{*/
 /*	t_philo	*philo;*/

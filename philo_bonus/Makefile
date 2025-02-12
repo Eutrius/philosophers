@@ -17,7 +17,9 @@ RM = rm -f
 CFLAGS = -Wall -Werror -Wextra
 
 SOURCES = main_bonus.c check_args_bonus.c \
-		  print_usage_bonus.c utils_bonus.c 
+		  print_usage_bonus.c utils_bonus.c \
+		  ph_states_bonus.c table_bonus.c
+
 
 OBJECTS = $(SOURCES:.c=.o)
 

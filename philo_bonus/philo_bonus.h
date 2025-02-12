@@ -14,6 +14,7 @@
 # define PHILO_BONUS_H
 
 # include <pthread.h>
+# include <semaphore.h>
 
 # define TABLE "/table"
 
@@ -23,16 +24,13 @@ typedef enum e_state	t_state;
 
 typedef struct s_table
 {
-	pthread_mutex_t		**mutexes;
-	pthread_mutex_t		*mutex;
-	int					*forks;
-	int					someone_died;
 	int					n_of_philos;
 	int					time_to_die;
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					n_to_eat;
 	int					n_full;
+	sem_t				*sem;
 }						t_table;
 
 typedef struct s_philo
@@ -65,14 +63,12 @@ void					custom_sleep(int start, int delay);
 
 int						check_args(int argc, char **argv);
 void					free_philosophers(t_philo **philosophers);
-pid_t					**create_philosophers(size_t size);
 void					simulate(t_table *table, t_philo **philosophers);
 
-void					ph_sleep(t_table *table, t_philo *philo);
-void					ph_think(t_table *table, t_philo *philo);
-void					ph_die(t_philo *philo);
-void					ph_take_fork(t_table *table, t_philo *philo, int right);
-void					ph_eat(t_table *table, t_philo *philo);
+void					ph_sleep(int id);
+void					ph_think(int id);
+void					ph_take_fork(int id);
+void					ph_eat(int id);
 
 int						prepare_table(t_table *table, int argc, char **argv);
 void					clean_table(t_table *table);

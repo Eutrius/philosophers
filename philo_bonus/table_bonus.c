@@ -11,10 +11,9 @@
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
-#include <stdlib.h>
-#include <string.h>
-
-static int	create_forks(t_table *table, int size);
+#include <fcntl.h>
+#include <semaphore.h>
+#include <unistd.h>
 
 int	prepare_table(t_table *table, int argc, char **argv)
 {
@@ -27,38 +26,6 @@ int	prepare_table(t_table *table, int argc, char **argv)
 		table->n_to_eat = ft_atoi(argv[5]);
 	else
 		table->n_to_eat = -1;
-	if (create_forks(table, table->n_of_philos))
-		return (1);
-	if (create_mutexes(table, table->n_of_philos))
-		return (1);
-	if (init_mutexes(table, table->n_of_philos))
-		return (1);
-	return (0);
-}
-
-void	clean_table(t_table *table)
-{
-	int	i;
-
-	free(table->forks);
-	i = 0;
-	if (table->mutexes)
-	{
-		while (i < table->n_of_philos && table->mutexes[i] != NULL)
-		{
-			free(table->mutexes[i]);
-			i++;
-		}
-		free(table->mutex);
-		free(table->mutexes);
-	}
-}
-
-static int	create_forks(t_table *table, int size)
-{
-	table->forks = malloc(sizeof(int) * (size));
-	if (table->forks == NULL)
-		return (1);
-	memset(table->forks, 0, sizeof(int) * (size));
+	usleep(1000);
 	return (0);
 }
