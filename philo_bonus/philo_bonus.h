@@ -34,6 +34,7 @@ typedef struct s_table
 	int					time_to_sleep;
 	int					n_to_eat;
 	int					n_full;
+	long				start_time;
 }						t_table;
 
 typedef struct s_philo
@@ -56,7 +57,7 @@ typedef enum e_state
 
 void					print_usage(void);
 long					gettimeofday_ms(void);
-void					custom_sleep(int start, int delay);
+void					custom_sleep(long start, long delay);
 
 int						ft_atoi(const char *nptr);
 char					*ft_itoa(int n);
@@ -70,7 +71,7 @@ void					simulate(t_table *table, t_philo **philosophers);
 
 void					ph_sleep(t_table *table, t_philo *philo);
 void					ph_think(t_table *table, t_philo *philo);
-void					ph_die(t_philo *philo);
+void					ph_die(t_table *table, t_philo *philo);
 void					ph_take_fork(t_table *table, t_philo *philo, int right);
 void					ph_eat(t_table *table, t_philo *philo);
 

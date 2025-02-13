@@ -16,8 +16,9 @@
 
 void	ph_eat(t_table *table, t_philo *philo)
 {
-	printf("%li %i is eating\n", gettimeofday_ms(), philo->id);
-	custom_sleep(philo->last_eaten, table->time_to_eat);
+	printf("%li %i is eating\n", gettimeofday_ms() - table->start_time,
+		philo->id);
+	custom_sleep(gettimeofday_ms(), table->time_to_eat);
 	/*philo->n_eaten++;*/
 	/*if (philo->n_eaten == table->n_to_eat)*/
 	/*{*/
@@ -40,8 +41,10 @@ void	ph_eat(t_table *table, t_philo *philo)
 
 void	ph_sleep(t_table *table, t_philo *philo)
 {
-	printf("%li %i is sleeping\n", gettimeofday_ms(), philo->id);
+	printf("%li %i is sleeping\n", gettimeofday_ms() - table->start_time,
+		philo->id);
 	custom_sleep(gettimeofday_ms(), table->time_to_sleep);
+	/*custom_sleep(gettimeofday_ms(), table->time_to_sleep);*/
 	/*if (philo->sleep == -1)*/
 	/*{*/
 	/*	philo->sleep = gettimeofday_ms();*/
@@ -60,14 +63,14 @@ void	ph_sleep(t_table *table, t_philo *philo)
 void	ph_think(t_table *table, t_philo *philo)
 {
 	(void)table;
-	printf("%li %i is thinking\n", gettimeofday_ms(), philo->id);
+	printf("%li %i is thinking\n", gettimeofday_ms() - table->start_time,
+		philo->id);
 }
 
 void	ph_take_fork(t_table *table, t_philo *philo, int right)
 {
-	(void)right;
-	(void)table;
-	printf("%li %i has taken a fork\n", gettimeofday_ms(), philo->id);
+	printf("%li %i has taken a fork\n", gettimeofday_ms() - table->start_time,
+		philo->id);
 	/*int	hand;*/
 	/**/
 	/*hand = philo->left;*/
@@ -88,7 +91,7 @@ void	ph_take_fork(t_table *table, t_philo *philo, int right)
 	/*	pthread_mutex_unlock(table->mutexes[hand]);*/
 }
 
-void	ph_die(t_philo *philo)
+void	ph_die(t_table *table, t_philo *philo)
 {
-	printf("%li %i died\n", gettimeofday_ms(), philo->id);
+	printf("%li %i died\n", gettimeofday_ms() - table->start_time, philo->id);
 }

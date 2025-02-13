@@ -44,18 +44,12 @@ void	print_usage(void)
 long	gettimeofday_ms(void)
 {
 	struct timeval	time;
-	static long		start_time;
 
-	if (start_time == 0)
-		gettimeofday(&time, NULL);
-	{
-		start_time = time.tv_sec * 1000 + time.tv_usec / 1000;
-		return (0);
-	}
-	return ((time.tv_sec * 1000 + time.tv_usec / 1000) - start_time);
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	custom_sleep(int start, int delay)
+void	custom_sleep(long start, long delay)
 {
 	while (1)
 	{

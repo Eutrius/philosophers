@@ -27,7 +27,7 @@ int	prepare_table(t_table *table, int argc, char **argv)
 	else
 		table->n_to_eat = -1;
 	sem_unlink(FORKS);
-	table->forks = sem_open(FORKS, O_CREAT, 0644, table->n_of_philos);
+	table->forks = sem_open(FORKS, O_CREAT | O_EXCL, 0644, table->n_of_philos);
 	if (table->forks == SEM_FAILED)
 		return (1);
 	return (0);

@@ -16,30 +16,31 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-/*static int	check_table(t_table *table, t_philo *philo);*/
-void	routine(t_table *table, t_philo *philo, sem_t *forks);
+void		routine(t_table *table, t_philo *philo, sem_t *forks);
+void		monitor(t_table *table, t_philo **philosophers);
+static int	check_death(t_table *table, t_philo *philo);
+static void	kill_all(t_table *table, t_philo **philosophers);
 
 void	simulate(t_table *table, t_philo **philosophers)
 {
 	int	i;
 
 	i = 0;
-	gettimeofday_ms();
+	table->start_time = gettimeofday_ms();
 	while (i < table->n_of_philos)
 	{
 		philosophers[i]->pid = fork();
 		if (philosophers[i]->pid == 0)
+		{
+			philosophers[i]->last_eaten = gettimeofday_ms() - table->start_time;
 			routine(table, philosophers[i], table->forks);
+		}
 		i++;
 	}
-	while (1)
-	{
-		sem_post(philosophers[0]->sem);
-		waitpid(-1, NULL, WNOHANG);
-	}
+	monitor(table, philosophers);
 }
-
 void	routine(t_table *table, t_philo *philo, sem_t *forks)
+
 {
 	while (1)
 	{
@@ -54,29 +55,60 @@ void	routine(t_table *table, t_philo *philo, sem_t *forks)
 		sem_post(forks);
 		ph_sleep(table, philo);
 	}
-	exit(0);
 }
 
-/*static int	check_table(t_table *table, t_philo *philo)*/
-/*{*/
-/*	if ((int)(gettimeofday_ms() - philo->last_eaten) >= table->time_to_die)*/
-/*	{*/
-/*		if (!table->someone_died)*/
-/*			pthread_mutex_lock(table->mutex);*/
-/*		{*/
-/*			table->someone_died = 1;*/
-/*			ph_die(philo);*/
-/*			pthread_mutex_unlock(table->mutex);*/
-/*			return (1);*/
-/*		}*/
-/*		else pthread_mutex_unlock(table->mutex);*/
-/*	}*/
-/*	pthread_mutex_lock(table->mutex);*/
-/*	if (table->someone_died)*/
-/*	{*/
-/*		pthread_mutex_unlock(table->mutex);*/
-/*		return (1);*/
-/*	}*/
-/*	pthread_mutex_unlock(table->mutex);*/
-/*	return (0);*/
-/*}*/
+void	monitor(t_table *table, t_philo **philosophers)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (1)
+	{
+		j = 0;
+		while (j < table->n_of_philos / 2)
+		{
+			philosophers[(i + j)
+				% table->n_of_philos]->last_eaten = gettimeofday_ms()
+				- table->start_time;
+			sem_post(philosophers[(i + j) % table->n_of_philos]->sem);
+			j++;
+			j++;
+		}
+		j = 0;
+		while (j < table->n_of_philos)
+		{
+			if (check_death(table, philosophers[j]))
+			{
+				ph_die(table, philosophers[j]);
+				kill_all(table, philosophers);
+			}
+			j++;
+		}
+		i = (i + 1) % table->n_of_philos;
+		custom_sleep(gettimeofday_ms(), table->time_to_eat);
+	}
+}
+
+static int	check_death(t_table *table, t_philo *philo)
+{
+	if (((gettimeofday_ms() - table->start_time)
+			- philo->last_eaten) >= table->time_to_die)
+		return (1);
+	return (0);
+}
+
+static void	kill_all(t_table *table, t_philo **philosophers)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->n_of_philos)
+	{
+		kill(philosophers[i]->pid, SIGKILL);
+		i++;
+	}
+	free_philosophers(philosophers);
+	clean_table(table);
+	exit(0);
+}
