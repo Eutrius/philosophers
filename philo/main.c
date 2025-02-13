@@ -31,7 +31,6 @@ int	main(int argc, char **argv)
 	philosophers = create_philosophers(&table, table.n_of_philos);
 	simulate(&table, philosophers);
 	free_philosophers(philosophers);
-	destroy_mutexes(&table, table.n_of_philos);
 	clean_table(&table);
 	return (0);
 }

@@ -6,86 +6,77 @@
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:30:08 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/12 13:06:47 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:47:41 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
-static int	check_table(t_table *table, t_philo *philo);
-static void	*routine(void *data);
+/*static int	check_table(t_table *table, t_philo *philo);*/
+void	routine(t_table *table, t_philo *philo, sem_t *forks);
 
 void	simulate(t_table *table, t_philo **philosophers)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = 0;
 	gettimeofday_ms();
 	while (i < table->n_of_philos)
 	{
-		if (pthread_create(&philosophers[i]->thread, NULL, routine,
-				philosophers[i]))
-			break ;
+		philosophers[i]->pid = fork();
+		if (philosophers[i]->pid == 0)
+			routine(table, philosophers[i], table->forks);
 		i++;
 	}
-	while (j < i)
-	{
-		pthread_join(philosophers[j]->thread, NULL);
-		j++;
-	}
-}
-
-static void	*routine(void *data)
-{
-	t_philo	*philo;
-	t_table	*table;
-
-	philo = (t_philo *)data;
-	table = philo->table;
 	while (1)
 	{
-		if (check_table(table, philo))
-			break ;
-		if (philo->state == IDLE)
-			ph_think(table, philo);
-		else if (philo->state == THINKING)
-		{
-			ph_take_fork(table, philo, LEFT);
-			if (philo->forks == 1)
-				ph_take_fork(table, philo, RIGHT);
-			if (philo->forks == 2)
-				ph_eat(table, philo);
-		}
-		else if (philo->state == SLEEPING)
-			ph_sleep(table, philo);
+		sem_post(philosophers[0]->sem);
+		waitpid(-1, NULL, WNOHANG);
 	}
-	return (NULL);
 }
 
-static int	check_table(t_table *table, t_philo *philo)
+void	routine(t_table *table, t_philo *philo, sem_t *forks)
 {
-	if ((int)(gettimeofday_ms() - philo->last_eaten) >= table->time_to_die)
+	while (1)
 	{
-		pthread_mutex_lock(table->mutex);
-		if (!table->someone_died)
-		{
-			table->someone_died = 1;
-			ph_die(philo);
-			pthread_mutex_unlock(table->mutex);
-			return (1);
-		}
-		else
-			pthread_mutex_unlock(table->mutex);
+		ph_think(table, philo);
+		sem_wait(philo->sem);
+		sem_wait(forks);
+		ph_take_fork(table, philo, LEFT);
+		sem_wait(forks);
+		ph_take_fork(table, philo, RIGHT);
+		ph_eat(table, philo);
+		sem_post(forks);
+		sem_post(forks);
+		ph_sleep(table, philo);
 	}
-	pthread_mutex_lock(table->mutex);
-	if (table->someone_died)
-	{
-		pthread_mutex_unlock(table->mutex);
-		return (1);
-	}
-	pthread_mutex_unlock(table->mutex);
-	return (0);
+	exit(0);
 }
+
+/*static int	check_table(t_table *table, t_philo *philo)*/
+/*{*/
+/*	if ((int)(gettimeofday_ms() - philo->last_eaten) >= table->time_to_die)*/
+/*	{*/
+/*		if (!table->someone_died)*/
+/*			pthread_mutex_lock(table->mutex);*/
+/*		{*/
+/*			table->someone_died = 1;*/
+/*			ph_die(philo);*/
+/*			pthread_mutex_unlock(table->mutex);*/
+/*			return (1);*/
+/*		}*/
+/*		else pthread_mutex_unlock(table->mutex);*/
+/*	}*/
+/*	pthread_mutex_lock(table->mutex);*/
+/*	if (table->someone_died)*/
+/*	{*/
+/*		pthread_mutex_unlock(table->mutex);*/
+/*		return (1);*/
+/*	}*/
+/*	pthread_mutex_unlock(table->mutex);*/
+/*	return (0);*/
+/*}*/

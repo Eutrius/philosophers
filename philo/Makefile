@@ -16,7 +16,7 @@ CC = cc
 RM = rm -f
 CFLAGS = -Wall -Werror -Wextra
 
-SOURCES = main.c check_args.c philosophers.c print_usage.c utils.c table.c mutex.c \
+SOURCES = main.c check_args.c philosophers.c utils.c table.c mutex.c \
 		  ph_states.c simulate.c
 
 OBJECTS = $(SOURCES:.c=.o)

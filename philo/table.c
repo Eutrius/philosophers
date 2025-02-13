@@ -44,6 +44,7 @@ void	clean_table(t_table *table)
 	i = 0;
 	if (table->mutexes)
 	{
+		destroy_mutexes(table, table->n_of_philos);
 		while (i < table->n_of_philos && table->mutexes[i] != NULL)
 		{
 			free(table->mutexes[i]);

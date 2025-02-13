@@ -6,7 +6,7 @@
 #    By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/03 11:44:58 by jyriarte          #+#    #+#              #
-#    Updated: 2025/02/09 13:46:20 by jyriarte         ###   ########.fr        #
+#    Updated: 2025/02/13 12:24:51 by jyriarte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,10 +16,9 @@ CC = cc
 RM = rm -f
 CFLAGS = -Wall -Werror -Wextra
 
-SOURCES = main_bonus.c check_args_bonus.c \
-		  print_usage_bonus.c utils_bonus.c \
-		  ph_states_bonus.c table_bonus.c
-
+SOURCES = main_bonus.c check_args_bonus.c philosophers_bonus.c \
+		  utils_bonus.c table_bonus.c ft_utils_bonus.c\
+		  ph_states_bonus.c simulate_bonus.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
