@@ -24,7 +24,5 @@ int	main(int argc, char **argv)
 		clean_table(&table);
 	philosophers = create_philosophers(table.n_of_philos);
 	simulate(&table, philosophers);
-	free_philosophers(philosophers);
-	clean_table(&table);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 22:14:14 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/13 11:36:12 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/13 21:42:45 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,16 @@ void	print_usage(void)
 long	gettimeofday_ms(void)
 {
 	struct timeval	time;
+	static long		start;
 
+	if (start == 0)
+	{
+		gettimeofday(&time, NULL);
+		start = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+		return (0);
+	}
 	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000) - start);
 }
 
 void	custom_sleep(long start, long delay)

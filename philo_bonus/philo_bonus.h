@@ -6,7 +6,7 @@
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:34:27 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/13 12:14:52 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/13 22:24:46 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,10 @@
 # include <pthread.h>
 # include <semaphore.h>
 
-# define LEFT 0
-# define RIGHT 1
 # define FORKS "/forks"
 
 typedef struct s_philo	t_philo;
 typedef struct s_table	t_table;
-typedef enum e_state	t_state;
 
 typedef struct s_table
 {
@@ -34,7 +31,6 @@ typedef struct s_table
 	int					time_to_sleep;
 	int					n_to_eat;
 	int					n_full;
-	long				start_time;
 }						t_table;
 
 typedef struct s_philo
@@ -45,15 +41,9 @@ typedef struct s_philo
 	long				last_eaten;
 	char				*name;
 	sem_t				*sem;
+	int					slept;
 
 }						t_philo;
-
-typedef enum e_state
-{
-	IDLE,
-	THINKING,
-	SLEEPING,
-}						t_state;
 
 void					print_usage(void);
 long					gettimeofday_ms(void);
@@ -68,17 +58,15 @@ int						check_args(int argc, char **argv);
 void					free_philosophers(t_philo **philosophers);
 t_philo					**create_philosophers(size_t size);
 void					simulate(t_table *table, t_philo **philosophers);
+void					monitor(t_table *table, t_philo **philosophers);
 
-void					ph_sleep(t_table *table, t_philo *philo);
-void					ph_think(t_table *table, t_philo *philo);
-void					ph_die(t_table *table, t_philo *philo);
-void					ph_take_fork(t_table *table, t_philo *philo, int right);
 void					ph_eat(t_table *table, t_philo *philo);
+void					ph_sleep(t_table *table, t_philo *philo);
+void					ph_think(t_philo *philo);
+void					ph_take_fork(t_philo *philo);
+void					ph_die(t_philo *philo);
 
 int						prepare_table(t_table *table, int argc, char **argv);
 void					clean_table(t_table *table);
-int						create_mutexes(t_table *table, int size);
-int						init_mutexes(t_table *table, int size);
-void					destroy_mutexes(t_table *table, int size);
 
 #endif

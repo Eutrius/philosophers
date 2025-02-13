@@ -6,7 +6,7 @@
 /*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:51:14 by jyriarte          #+#    #+#             */
-/*   Updated: 2025/02/13 12:33:34 by jyriarte         ###   ########.fr       */
+/*   Updated: 2025/02/13 22:23:20 by jyriarte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static t_philo	*create_philosopher(int id)
 	philo->n_eaten = 0;
 	philo->last_eaten = 0;
 	philo->id = id;
+	philo->slept = 0;
 	philo->name = ft_strjoin("/philo", ft_itoa(id));
 	if (philo->name == NULL)
 	{

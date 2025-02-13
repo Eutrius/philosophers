@@ -1,0 +1,94 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitor_bonus.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jyriarte <jyriarte@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 21:24:43 by jyriarte          #+#    #+#             */
+/*   Updated: 2025/02/13 22:59:51 by jyriarte         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo_bonus.h"
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+static void	kill_all(t_table *table, t_philo **philosophers);
+static void	check_deaths(t_table *table, t_philo **philosophers);
+static void	eat_batch(t_table *table, t_philo **philosophers);
+
+void	monitor(t_table *table, t_philo **philosophers)
+{
+	int	last_eaten;
+
+	last_eaten = gettimeofday_ms();
+	eat_batch(table, philosophers);
+	while (1)
+	{
+		check_deaths(table, philosophers);
+		if (gettimeofday_ms() - last_eaten >= table->time_to_eat)
+		{
+			if (table->n_full == table->n_of_philos)
+				kill_all(table, philosophers);
+			last_eaten = gettimeofday_ms();
+			eat_batch(table, philosophers);
+		}
+	}
+}
+
+static void	check_deaths(t_table *table, t_philo **philosophers)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->n_of_philos)
+	{
+		if (((gettimeofday_ms())
+				- philosophers[i]->last_eaten) >= table->time_to_die)
+		{
+			ph_die(philosophers[i]);
+			kill_all(table, philosophers);
+		}
+		i++;
+	}
+}
+
+static void	eat_batch(t_table *table, t_philo **philosophers)
+{
+	static int	id;
+	int			i;
+
+	i = 0;
+	while (i < table->n_of_philos / 2)
+	{
+		if (philosophers[id]->slept && gettimeofday_ms()
+			- philosophers[id]->last_eaten < table->time_to_eat
+			+ table->time_to_sleep)
+			break ;
+		philosophers[id]->slept = 1;
+		philosophers[id]->last_eaten = gettimeofday_ms();
+		sem_post(philosophers[id]->sem);
+		philosophers[id]->n_eaten++;
+		if (philosophers[id]->n_eaten == table->n_to_eat)
+			table->n_full++;
+		id = (id + 1) % table->n_of_philos;
+		i++;
+	}
+}
+
+static void	kill_all(t_table *table, t_philo **philosophers)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->n_of_philos)
+	{
+		kill(philosophers[i]->pid, SIGKILL);
+		i++;
+	}
+	free_philosophers(philosophers);
+	clean_table(table);
+	exit(0);
+}
