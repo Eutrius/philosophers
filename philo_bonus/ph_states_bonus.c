@@ -36,7 +36,7 @@ void	ph_take_fork(t_philo *philo)
 	printf("%li %i has taken a fork\n", gettimeofday_ms(), philo->id);
 }
 
-void	ph_die(t_philo *philo)
+void	ph_die(int id)
 {
-	printf("%li %i died\n", gettimeofday_ms(), philo->id);
+	printf("%li %i died\n", gettimeofday_ms(), id);
 }

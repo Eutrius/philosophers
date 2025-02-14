@@ -48,11 +48,9 @@ static t_philo	*create_philosopher(int id)
 	philo = malloc(sizeof(t_philo));
 	if (!philo)
 		return (NULL);
-	philo->n_eaten = 0;
-	philo->last_eaten = 0;
+	memset(philo, 0, sizeof(t_philo));
 	philo->id = id;
-	philo->slept = 0;
-	philo->name = ft_strjoin("/philo", ft_itoa(id));
+	philo->name = ft_strjoin("/philo_bonus_", ft_itoa(id));
 	if (philo->name == NULL)
 	{
 		free(philo);

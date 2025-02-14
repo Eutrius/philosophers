@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -64,4 +65,18 @@ void	custom_sleep(long start, long delay)
 			break ;
 		usleep(100);
 	}
+}
+
+void	kill_all(t_table *table, t_philo **philosophers)
+{
+	int	i;
+
+	i = 0;
+	while (i != -1 && i < table->n_of_philos)
+	{
+		kill(philosophers[i]->pid, SIGKILL);
+		i++;
+	}
+	free_philosophers(philosophers);
+	clean_table(table);
 }

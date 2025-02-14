@@ -13,7 +13,6 @@
 #include "philo_bonus.h"
 #include <fcntl.h>
 #include <semaphore.h>
-#include <stdlib.h>
 
 int	prepare_table(t_table *table, int argc, char **argv)
 {
@@ -35,10 +34,9 @@ int	prepare_table(t_table *table, int argc, char **argv)
 
 void	clean_table(t_table *table)
 {
-	if (table->forks != SEM_FAILED)
+	if (table->forks && table->forks != SEM_FAILED)
 	{
 		sem_close(table->forks);
 		sem_unlink(FORKS);
 	}
-	exit(1);
 }

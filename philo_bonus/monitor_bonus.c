@@ -11,11 +11,9 @@
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
-#include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-static void	kill_all(t_table *table, t_philo **philosophers);
 static void	check_deaths(t_table *table, t_philo **philosophers);
 static void	eat_batch(t_table *table, t_philo **philosophers);
 
@@ -31,7 +29,10 @@ void	monitor(t_table *table, t_philo **philosophers)
 		if (gettimeofday_ms() - last_eaten >= table->time_to_eat)
 		{
 			if (table->n_full == table->n_of_philos)
+			{
 				kill_all(table, philosophers);
+				exit(0);
+			}
 			last_eaten = gettimeofday_ms();
 			eat_batch(table, philosophers);
 		}
@@ -41,6 +42,7 @@ void	monitor(t_table *table, t_philo **philosophers)
 static void	check_deaths(t_table *table, t_philo **philosophers)
 {
 	int	i;
+	int	id;
 
 	i = 0;
 	while (i < table->n_of_philos)
@@ -48,8 +50,10 @@ static void	check_deaths(t_table *table, t_philo **philosophers)
 		if (((gettimeofday_ms())
 				- philosophers[i]->last_eaten) >= table->time_to_die)
 		{
-			ph_die(philosophers[i]);
+			id = i + 1;
 			kill_all(table, philosophers);
+			ph_die(id);
+			exit(0);
 		}
 		i++;
 	}
@@ -76,19 +80,4 @@ static void	eat_batch(t_table *table, t_philo **philosophers)
 		id = (id + 1) % table->n_of_philos;
 		i++;
 	}
-}
-
-static void	kill_all(t_table *table, t_philo **philosophers)
-{
-	int	i;
-
-	i = 0;
-	while (i < table->n_of_philos)
-	{
-		kill(philosophers[i]->pid, SIGKILL);
-		i++;
-	}
-	free_philosophers(philosophers);
-	clean_table(table);
-	exit(0);
 }

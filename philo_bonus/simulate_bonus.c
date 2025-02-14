@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -24,6 +25,11 @@ void	simulate(t_table *table, t_philo **philosophers)
 	while (i < table->n_of_philos)
 	{
 		philosophers[i]->pid = fork();
+		if (philosophers[i]->pid == -1)
+		{
+			kill_all(table, philosophers);
+			exit(1);
+		}
 		if (philosophers[i]->pid == 0)
 		{
 			philosophers[i]->last_eaten = 0;

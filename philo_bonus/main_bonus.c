@@ -21,8 +21,13 @@ int	main(int argc, char **argv)
 	if ((argc < 5 || argc > 6) || check_args(argc, argv))
 		print_usage();
 	if (prepare_table(&table, argc, argv))
-		clean_table(&table);
+		return (1);
 	philosophers = create_philosophers(table.n_of_philos);
+	if (philosophers == NULL)
+	{
+		clean_table(&table);
+		return (1);
+	}
 	simulate(&table, philosophers);
 	return (0);
 }

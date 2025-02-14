@@ -16,7 +16,7 @@
 # include <pthread.h>
 # include <semaphore.h>
 
-# define FORKS "/forks"
+# define FORKS "/philo_bonus_forks"
 
 typedef struct s_philo	t_philo;
 typedef struct s_table	t_table;
@@ -48,6 +48,7 @@ typedef struct s_philo
 void					print_usage(void);
 long					gettimeofday_ms(void);
 void					custom_sleep(long start, long delay);
+void					kill_all(t_table *table, t_philo **philosophers);
 
 int						ft_atoi(const char *nptr);
 char					*ft_itoa(int n);
@@ -64,7 +65,7 @@ void					ph_eat(t_table *table, t_philo *philo);
 void					ph_sleep(t_table *table, t_philo *philo);
 void					ph_think(t_philo *philo);
 void					ph_take_fork(t_philo *philo);
-void					ph_die(t_philo *philo);
+void					ph_die(int id);
 
 int						prepare_table(t_table *table, int argc, char **argv);
 void					clean_table(t_table *table);
