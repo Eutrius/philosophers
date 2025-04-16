@@ -12,7 +12,7 @@ This project implements the dining philosophers problem, a classic computer scie
 - [Usage](#usage)
 - [Implementation Details](#implementation-details)
 - [Concepts](#concepts)
-- [Contributing](#contributing)
+- [License](#license)
 
 ## 🤔 Problem Description
 
